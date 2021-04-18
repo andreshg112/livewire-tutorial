@@ -7,11 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Livewire</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    @livewireStyles
+    <livewire:styles />
 </head>
+
 <body>
     <livewire:comments />
-
-    @livewireScripts
+    <livewire:scripts />
 </body>
+
 </html>
