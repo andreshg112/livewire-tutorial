@@ -3,7 +3,6 @@
 namespace App\Http\Livewire;
 
 use App\Models\Comment;
-use Illuminate\Support\Carbon;
 use Livewire\Component;
 
 class Comments extends Component
@@ -35,6 +34,13 @@ class Comments extends Component
         $this->comments->prepend($createdComment);
 
         $this->newComment = '';
+    }
+
+    public function remove(Comment $comment)
+    {
+        $this->comments = $this->comments->except($comment->id);
+
+        $comment->delete();
     }
 
     public function render()
