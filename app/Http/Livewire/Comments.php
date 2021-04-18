@@ -18,18 +18,21 @@ class Comments extends Component
         $this->comments = Comment::latest()->get();
     }
 
+    public function updated($field)
+    {
+        $this->validateOnly($field, ['newComment' => ['required', 'max:255']]);
+    }
+
     public function addComment()
     {
-        if ($this->newComment == '') {
-            return;
-        }
+        $this->validate(['newComment' => ['required', 'max:255']]);
 
-        $comment = Comment::create([
+        $createdComment = Comment::create([
             'body' => $this->newComment,
             'user_id' => 1,
         ]);
 
-        $this->comments->prepend($comment);
+        $this->comments->prepend($createdComment);
 
         $this->newComment = '';
     }
