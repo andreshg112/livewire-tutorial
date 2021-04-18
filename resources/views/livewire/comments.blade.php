@@ -39,6 +39,9 @@
                         wire:click="remove({{ $comment->id }})"></i>
                 </div>
                 <p class="text-gray-800">{{ $comment->body }}</p>
+                @if ($comment->image)
+                    <img src="{{ $comment->image_path }}" alt="" srcset="">
+                @endif
             </div>
         @endforeach
         {{ $comments->links('pagination-links') }}

@@ -3,6 +3,9 @@
 namespace App\Http\Livewire;
 
 use App\Models\Comment;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManagerStatic;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -30,18 +33,40 @@ class Comments extends Component
     {
         $this->validate(['newComment' => ['required', 'max:255']]);
 
+        $image = $this->storeImage();
+
         $createdComment = Comment::create([
             'body' => $this->newComment,
             'user_id' => 1,
+            'image' => $image,
         ]);
 
         $this->newComment = '';
 
+        $this->image = '';
+
         session()->flash('message', 'Comment added successfully 😄');
+    }
+
+    public function storeImage()
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        $img = ImageManagerStatic::make($this->image)->encode('jpg');
+
+        $name = Str::random() . '.jpg';
+
+        Storage::disk('public')->put($name, $img);
+
+        return $name;
     }
 
     public function remove(Comment $comment)
     {
+        Storage::disk('public')->delete($comment->image);
+
         $comment->delete();
 
         session()->flash('message', 'Comment deleted successfully 😊');
